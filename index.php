@@ -21,9 +21,10 @@ $array0 = [
     ]
 ];
 
-function getSumOf2nds($input, $sum = 0)
+function getSumOf2nds($input)
 {
     $index = 0;
+    $sum = 0;
     foreach ($input as $value) {
         if (is_array($value)) {
             $sum += getSumOf2nds($value);
