@@ -4,18 +4,15 @@
  * 1) создать функцию - фабрику вызова функций пользователя через безымянную функцию
  */
 
-function fabricPower(float $power): callable
+function myFactory(callable $func):callable
 {
-    return function ($base) use ($power): float {
-        return pow($base, $power);
+    return function (...$arg) use ($func) {
+        $func(...$arg);
     };
 }
 
-$square = fabricPower(2);
-$cube = fabricPower(3);
-
-echo $square(4); // 16
-echo $cube(10.2); // 1061.208
+$my_dump = myFactory("var_dump");
+$my_dump((string) 4); // string(1) "4"
 
 /*
  * 2) создать функцию обеспечивающую запись в csv файл
