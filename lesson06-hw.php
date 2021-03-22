@@ -30,7 +30,7 @@ interface IAxleConfiguration
 interface IEngine
 {
     public function getEngineType(): string;
-    public function getEngineVolume(): string;
+    public function getEngineVolume(): int;
 }
 
 interface ITransmission
@@ -40,7 +40,7 @@ interface ITransmission
 
 trait TPower
 {
-    function calcPowerOutput()
+    function calcPowerOutput(string $type, int $volume): int
     {
         $koefficients = [
             "piston" => 1,
@@ -48,7 +48,7 @@ trait TPower
             "v8" => 3,
         ];
 
-        return ($koefficients[$this->getEngineType()] ?? 1) * $this->getEngineVolume();
+        return ($koefficients[$type] ?? 1) * $volume;
     }
 }
 
@@ -76,7 +76,7 @@ class Vehicle implements IBody, IAxleConfiguration, IEngine, ITransmission
         return $this->engineType;
     }
 
-    public function getEngineVolume(): string
+    public function getEngineVolume(): int
     {
         return $this->engineVolume;
     }
@@ -84,6 +84,11 @@ class Vehicle implements IBody, IAxleConfiguration, IEngine, ITransmission
     public function getTransmission(): string
     {
         return $this->transmission;
+    }
+
+    public function getPowerOutput(): int
+    {
+        return $this->calcPowerOutput($this->getEngineType(), $this->getEngineVolume());
     }
 }
 
@@ -113,6 +118,7 @@ foreach ([$niva, $maz] as $vehicle) {
     echo "Body type: " . $vehicle->getBody() . "<br/>" . PHP_EOL;
     echo "Engine type: " . $vehicle->getEngineType() . "<br/>" . PHP_EOL;
     echo "Engine Volume: " . $vehicle->getEngineVolume() . "<br/>" . PHP_EOL;
-    echo "Power output: " . $vehicle->calcPowerOutput() . "<br/>" . PHP_EOL;
+    echo "Power output: " . $vehicle->getPowerOutput() . "<br/>" . PHP_EOL;
     echo "</p>" . PHP_EOL;
 }
+
